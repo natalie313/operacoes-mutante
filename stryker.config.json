@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "mutate": [
+    "src/**/*.js"
+  ],
+  "testRunner": "jest",
+  "plugins": [
+    "@stryker-mutator/jest-runner"
+  ],
+  "reporters": [
+    "clear-text",
+    "html",
+    "json",
+    "progress"
+  ],
+  "coverageAnalysis": "perTest",
+  "concurrency": 4
+}

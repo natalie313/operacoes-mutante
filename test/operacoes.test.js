@@ -17,7 +17,7 @@ describe('Suíte de Testes Fraca para 50 Operações Aritméticas', () => {
   test('3. deve multiplicar dois números positivos', () => { expect(multiplicacao(3, 4)).toBe(12); });
   test('4. deve dividir e lançar erro para divisão por zero', () => {
     expect(divisao(10, 2)).toBe(5);
-    expect(() => divisao(5, 0)).toThrow();
+    expect(() => divisao(5, 0)).toThrow(new Error('Divisão por zero não é permitida.'));
   });
   test('5. deve calcular a potência com expoente positivo', () => { expect(potencia(2, 3)).toBe(8); });
   test('6. deve calcular a raiz quadrada de um quadrado perfeito', () => { expect(raizQuadrada(16)).toBe(4); });
@@ -73,4 +73,94 @@ describe('Suíte de Testes Fraca para 50 Operações Aritméticas', () => {
   test('48. deve calcular o dobro de um número', () => { expect(dobro(10)).toBe(20); });
   test('49. deve calcular o triplo de um número', () => { expect(triplo(10)).toBe(30); });
   test('50. deve calcular a metade de um número', () => { expect(metade(20)).toBe(10); });
+});
+
+describe('Casos de fronteira e ramos de erro', () => {
+  test('trata zero e valores negativos nas operações básicas', () => {
+    expect(raizQuadrada(0)).toBe(0);
+    expect(() => raizQuadrada(-1)).toThrow('Não é possível calcular a raiz quadrada de um número negativo.');
+    expect(fatorial(0)).toBe(1);
+    expect(fatorial(1)).toBe(1);
+    expect(() => fatorial(-1)).toThrow('Fatorial não é definido para números negativos.');
+    expect(divisao(-6, 2)).toBe(-3);
+    expect(restoDivisao(8, 2)).toBe(0);
+  });
+
+  test('valida arrays vazios e entradas alternativas', () => {
+    expect(mediaArray([])).toBe(0);
+    expect(somaArray([])).toBe(0);
+    expect(produtoArray([])).toBe(1);
+    expect(() => maximoArray([])).toThrow('Array vazio не possui valor máximo.');
+    expect(() => minimoArray([])).toThrow('Array vazio не possui valor mínimo.');
+    expect(valorAbsoluto(0)).toBe(0);
+    expect(valorAbsoluto(-7)).toBe(7);
+    expect(arredondar(2.5)).toBe(3);
+    expect(arredondar(-2.5)).toBe(-2);
+  });
+
+  test('distingue números pares, ímpares e arredondamentos', () => {
+    expect(isPar(0)).toBe(true);
+    expect(isPar(-4)).toBe(true);
+    expect(isPar(3)).toBe(false);
+    expect(isImpar(0)).toBe(false);
+    expect(isImpar(8)).toBe(false);
+    expect(isImpar(-3)).toBe(true);
+    expect(arredondarParaBaixo(5)).toBe(5);
+    expect(arredondarParaCima(5)).toBe(5);
+  });
+
+  test('cobre pontos trigonométricos, logaritmos e funções de ângulo', () => {
+    expect(seno(Math.PI / 2)).toBeCloseTo(1);
+    expect(cosseno(Math.PI)).toBeCloseTo(-1);
+    expect(tangente(Math.PI / 4)).toBeCloseTo(1);
+    expect(logaritmoNatural(1)).toBe(0);
+    expect(logaritmoBase10(10)).toBe(1);
+    expect(hipotenusa(0, 0)).toBe(0);
+    expect(grausParaRadianos(90)).toBeCloseTo(Math.PI / 2);
+    expect(radianosParaGraus(Math.PI / 2)).toBeCloseTo(90);
+  });
+
+  test('cobre casos-base e divisões de fronteira em sequências', () => {
+    expect(mdc(0, 5)).toBe(5);
+    expect(mdc(18, 12)).toBe(6);
+    expect(mmc(4, 6)).toBe(12);
+    expect(isPrimo(1)).toBe(false);
+    expect(isPrimo(2)).toBe(true);
+    expect(isPrimo(4)).toBe(false);
+    expect(fibonacci(0)).toBe(0);
+    expect(fibonacci(1)).toBe(1);
+    expect(fibonacci(2)).toBe(1);
+    expect(produtoArray([2, 0, 5])).toBe(0);
+  });
+
+  test('testa clamp nos limites e divisibilidade verdadeira ou falsa', () => {
+    expect(clamp(-1, 0, 10)).toBe(0);
+    expect(clamp(0, 0, 10)).toBe(0);
+    expect(clamp(10, 0, 10)).toBe(10);
+    expect(clamp(11, 0, 10)).toBe(10);
+    expect(isDivisivel(9, 3)).toBe(true);
+    expect(isDivisivel(10, 3)).toBe(false);
+  });
+
+  test('valida conversões, inverso e erros associados', () => {
+    expect(celsiusParaFahrenheit(100)).toBe(212);
+    expect(fahrenheitParaCelsius(212)).toBe(100);
+    expect(() => inverso(0)).toThrow('Não é possível inverter o número zero.');
+    expect(inverso(-2)).toBe(-0.5);
+  });
+
+  test('distingue comparações estritas de igualdade', () => {
+    expect(isMaiorQue(5, 5)).toBe(false);
+    expect(isMaiorQue(4, 5)).toBe(false);
+    expect(isMenorQue(5, 5)).toBe(false);
+    expect(isMenorQue(6, 5)).toBe(false);
+    expect(isEqual(5, 5)).toBe(true);
+    expect(isEqual(5, 6)).toBe(false);
+  });
+
+  test('calcula mediana de arrays vazios, pares e fora de ordem', () => {
+    expect(() => medianaArray([])).toThrow('Array vazio не possui mediana.');
+    expect(medianaArray([8, 2, 4, 6])).toBe(5);
+    expect(medianaArray([9, 1, 5])).toBe(5);
+  });
 });
